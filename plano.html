@@ -1,0 +1,673 @@
+<!doctype html>
+<!--
+  DESIGN — o contrato desta tela.
+
+  O sistema está em assets/base-v2.css e o raciocínio inteiro está comentado lá.
+  Em uma linha: dois registros — leitura é serifa sem cromia, instrumento é
+  monoespaçado denso e só ele carrega cor — e a lei da cor, que reserva o acento
+  ao que se clica, a cor de estado ao que aconteceu, e deixa todo o resto cinza.
+  O tema tem três estados (auto | claro | escuro) e nav.js os escreve em
+  data-theme antes de o <body> existir. As fontes estão em assets/fontes/:
+  nada sai para a internet.
+
+  O ?v= nos links de CSS existe para o navegador não servir a folha antiga do
+  cache. Mudou o CSS, suba o número — em todas as telas, senão elas divergem.
+
+  Específico do plano:
+
+  • É a tela mais longa do material e a mais de leitura. O registro de leitura
+    domina o texto das seções; o de instrumento fica na subnavegação, na
+    contagem regressiva, nos filtros, na tabela das 200 questões e no
+    cronograma. Estilos próprios em assets/plano-v2.css.
+  • --calor-1..5 é rampa SEQUENCIAL: uma cor só, do claro ao escuro, e serve
+    para magnitude. Nunca use a rampa para identificar séries de um gráfico —
+    para isso existe --serie-1..3, paleta categórica validada. O mapa de
+    incidência e a barra de pesos usam a rampa porque são grandeza, não
+    identidade.
+  • A barra de pesos (.wseg) é uma grandeza repartida em quatro partes, cada uma
+    rotulada por dentro. É o rótulo que dispensa a cor de carregar a informação.
+  • O rótulo dentro de .cfill: o script abaixo marca com a classe `claro` as
+    barras nos três primeiros passos da rampa, e a cor do texto sai de --tinta
+    ou --papel. Os dois viram junto com o tema; um branco fixo não vira, e some
+    contra os passos claros da rampa no tema claro.
+  • .subnav gruda em top:46px, que é a altura de nav.top em base-v2.css. Mexeu
+    na altura da barra, mexa aqui também ou abre uma fresta.
+  • body.plano é gancho sem regra — era assim antes da migração e continua.
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Plano de ação — ENADE 2026 TADS</title>
+<link rel="stylesheet" href="assets/base-v2.css?v=2" />
+<link rel="stylesheet" href="assets/plano-v2.css?v=2" />
+<script>window.PAGINA = "plano";</script>
+<script src="assets/nav.js"></script>
+<script src="assets/acervo.js"></script>
+</head>
+<body class="plano">
+
+<div class="subnav">
+  <div class="wrap">
+    <a href="#peso">Onde a nota mora</a>
+    <a href="#tripe">O tripé</a>
+    <a href="#mapa">Mapa de incidência</a>
+    <a href="#plano">17 semanas</a>
+    <a href="#correcao">Como corrigem</a>
+    <a href="#tecnica">Técnica</a>
+    <a href="#revisao">Revisão</a>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="stack">
+      <span class="eyebrow">Plano de ação · construído sobre 200 questões oficiais</span>
+      <h1>Cinco provas do ENADE já te disseram o que vai cair.</h1>
+      <p class="lede">
+        As edições de 2008, 2011, 2014, 2017 e 2021 de Análise e Desenvolvimento de Sistemas
+        foram lidas questão por questão — prova, gabarito e padrão de resposta. A estrutura do
+        caderno mudou em 2026, mas o que cai não: três habilidades aparecem nas discursivas do
+        componente específico em <strong>cinco anos de cinco</strong>, e agora disputam a
+        <strong>única</strong> discursiva da prova. Este é o plano que usa isso a seu favor,
+        dimensionado para 4 horas por semana.
+      </p>
+    </div>
+
+    <div class="countdown">
+      <span class="eyebrow" style="margin:0">Prova · domingo, 29 de novembro de 2026</span>
+      <div><span class="cd-num" id="cdDays">—</span>
+        <span style="font-size:14px;color:var(--muted);margin-left:6px">dias</span></div>
+      <div class="cd-row">
+        <div class="cd-cell"><b id="cdWeeks">—</b><span>semanas</span></div>
+        <div class="cd-cell"><b id="cdHours">—</b><span>horas de estudo*</span></div>
+        <div class="cd-cell"><b>4 h</b><span>duração da prova</span></div>
+      </div>
+      <p class="fine" style="margin-top:2px">*a 4 h/semana, o ritmo que você declarou.</p>
+    </div>
+  </div>
+</header>
+
+<section id="peso">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">01 · Onde a nota mora</span>
+      <h2>Duas de cada três notas vêm de 30 questões.</h2>
+      <p class="lede">A composição da prova mudou em 2026 e é pública: 15 objetivas de formação
+        geral, 30 do componente específico e uma discursiva (portarias Inep 154 e 169, de
+        14/04/2026). Ela decide sozinha a ordem de prioridade do seu estudo — antes de qualquer
+        consideração sobre gosto ou facilidade.</p>
+    </div>
+
+    <div class="weights">
+      <div class="wbar">
+        <div class="wseg a" style="flex:63.75">63,75%<small>30 objetivas · componente específico</small></div>
+        <div class="wseg b" style="flex:25">25%<small>15 objetivas · form. geral</small></div>
+        <div class="wseg c" style="flex:11.25">11,25%<small>a discursiva</small></div>
+      </div>
+      <p class="fine">Componente específico = 75% da nota (85% objetivas, 15% discursiva).
+        Formação geral = 25%, agora inteiros em objetivas — as duas discursivas dela foram
+        extintas. <strong>Ponderação provisória:</strong> o Edital 61/2026, item 16.5, remete o
+        cálculo da nota a nota técnica ainda não publicada; até lá vale a proporção histórica.</p>
+    </div>
+
+    <div class="cards c3" style="margin-top:26px">
+      <div class="card key">
+        <h3>O caderno mudou em 2026</h3>
+        <p>Até 2021: objetivas 1–8 de formação geral, 9–35 do específico, mais D1–D2 e D3–D5
+          discursivas — idêntico por quatro edições seguidas. Agora são 15 objetivas de formação
+          geral, 30 do específico e uma única discursiva. O que cai não mudou; a montagem, sim.</p>
+      </div>
+      <div class="card key">
+        <h3>Resposta discursiva: 15 linhas</h3>
+        <p>Limite explícito em 2021. Combinado ao critério de correção por contagem de itens,
+          isso significa resposta <strong>enxuta e listada</strong> — não texto desenvolvido.</p>
+      </div>
+      <div class="card flag">
+        <h3>Formação geral: quase o dobro de questões</h3>
+        <p>Passou de 8 para 15 objetivas e concentra os 25% inteiros, já que perdeu as
+          discursivas. O conteúdo continua sendo atualidades, e a Portaria 154/2026 lista doze
+          temas oficiais — vale ler a lista uma vez e treinar o formato.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tripe">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">02 · O padrão mais forte do acervo</span>
+      <h2>Um tripé fixo, que agora cabe numa questão só.</h2>
+      <p class="lede">Em toda edição analisada, as discursivas do componente específico cobrem
+        as mesmas três habilidades: uma modelagem UML, uma estrutura de dados linear e um
+        algoritmo sobre vetor ou matriz. Em 2026 sobrou <strong>uma</strong> discursiva — e o
+        mais provável é que ela seja uma dessas três. O padrão não perdeu valor: ficou mais
+        barato de treinar e mais caro de ignorar, porque são 11,25% da nota numa tarefa só.</p>
+    </div>
+
+    <div class="tripe">
+      <table>
+        <thead>
+          <tr><th>Ano</th><th>Modelagem UML</th><th>Estrutura de dados</th><th>Algoritmo com vetor / matriz</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2008</td><td>Casos de uso <span class="fine">(38)</span> e diagrama de classes <span class="fine">(39)</span></td><td class="fine">—</td><td>Traço de matriz bidimensional <span class="fine">(40, anulada)</span></td></tr>
+          <tr><td>2011</td><td>Classes de domínio + requisitos funcionais <span class="fine">(D3)</span></td><td>Teste de mesa de vetores <span class="fine">(D4)</span></td><td>Construir algoritmo de progressão geométrica <span class="fine">(D5)</span></td></tr>
+          <tr><td>2014</td><td>Diagrama de classes com composição <span class="fine">(D3)</span></td><td><strong>Pilha</strong>: push, pop e inversão <span class="fine">(D4)</span></td><td>Teste de mesa com matrizes 3×3 <span class="fine">(D5)</span></td></tr>
+          <tr><td>2017</td><td>Classes a partir de protótipos de tela <span class="fine">(D5)</span></td><td><strong>Fila</strong>: desenfileirar e mostrar <span class="fine">(D4)</span></td><td>Matriz 40×40 com vetor contador <span class="fine">(D3)</span></td></tr>
+          <tr><td>2021</td><td>Classes a partir de histórias de usuário <span class="fine">(D4)</span></td><td><strong>Lista encadeada</strong> com prioridade <span class="fine">(D5)</span></td><td>Vetor de 1000 alturas: maior, menor, média <span class="fine">(D3)</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cards c3" style="margin-top:24px">
+      <div class="card key">
+        <h3>Treine exatamente isto</h3>
+        <p>Diagrama de classes a partir de um texto de requisitos. Pilha, fila e lista encadeada
+          codificadas do zero. Um duplo laço sobre matriz com vetor acumulador. Três moldes,
+          repetidos até virarem automáticos.</p>
+      </div>
+      <div class="card key">
+        <h3>A linguagem é livre — sempre</h3>
+        <p>Os cinco padrões oficiais declaram aceitar “pseudocódigo ou linguagem de programação”,
+          “português estruturado, Pascal, C ou Java”. Escolha <strong>uma</strong> notação e
+          domine-a. Comentários são dispensáveis.</p>
+      </div>
+      <div class="card key">
+        <h3>Nunca se pede “justifique”</h3>
+        <p>Em 15 discursivas de componente específico ao longo de cinco anos, o comando é sempre
+          produzir código, diagrama ou valores exatos de teste de mesa. Nunca comparar ou
+          argumentar. A resposta premiada é uma solução que funciona.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mapa">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">03 · Mapa de incidência</span>
+      <h2>Onde as 135 objetivas do componente específico realmente caíram.</h2>
+      <p class="lede">Contagem sobre as cinco edições. Três áreas concentram quase dois terços da
+        prova; banco de dados é pequeno mas nunca falta — apareceu em todos os anos.</p>
+    </div>
+
+    <div class="chart" id="chart"></div>
+    <p class="fine" style="margin-top:14px">Questões objetivas do componente específico, 2008–2021 (27 por ano, 135 no total).
+      A intensidade da barra acompanha a contagem.</p>
+
+    <div class="head" style="margin-top:48px">
+      <h3 style="font-size:20px">As 200 questões, uma a uma</h3>
+      <p class="fine">Filtre por ano, bloco, área ou habilidade e vá direto às questões reais nos PDFs da pasta.
+        Objetivas e discursivas, com gabarito oficial.</p>
+    </div>
+
+    <div class="filters">
+      <div class="field"><label for="fAno">Ano</label><select id="fAno"></select></div>
+      <div class="field"><label for="fBloco">Bloco</label><select id="fBloco"></select></div>
+      <div class="field"><label for="fArea">Área</label><select id="fArea"></select></div>
+      <div class="field"><label for="fHab">Habilidade</label><select id="fHab"></select></div>
+      <div class="field"><label for="fBusca">Buscar tema</label><input type="search" id="fBusca" placeholder="ex.: SQL, pilha, requisitos" /></div>
+      <span class="count" id="qCount"></span>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q">
+        <thead>
+          <tr><th>Ano</th><th>Nº</th><th>Bloco</th><th>Área</th><th>Tema</th><th>Habilidade</th><th>Formato</th><th>Gab.</th></tr>
+        </thead>
+        <tbody id="qBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="plano">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">04 · Cronograma</span>
+      <h2>Dezessete semanas, quatro horas por semana.</h2>
+      <p class="lede">A ordem segue peso na nota × incidência × custo de aprendizado — não a ordem
+        do currículo. A semana 1 é diagnóstica: o resultado dela deve reordenar as semanas 4 a 14.
+        Marque as tarefas; o progresso fica salvo neste navegador.</p>
+    </div>
+
+    <div class="progress">
+      <span class="chip" id="pLabel">0 de 0</span>
+      <div class="ptrack"><div class="pfill" id="pFill"></div></div>
+      <button class="reset" id="pReset" type="button">Limpar marcações</button>
+    </div>
+
+    <div class="weeks" id="weeks"></div>
+  </div>
+</section>
+
+<section id="correcao">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">05 · Como o INEP corrige as discursivas</span>
+      <h2>O enunciado é a rubrica. Quase ninguém estuda isso.</h2>
+      <p class="lede">Extraído dos cinco padrões oficiais de resposta. Cada restrição numérica do
+        comando é, literalmente, um item de correção.</p>
+    </div>
+
+    <ol class="num">
+      <li><strong>Espelhe o comando, item por item.</strong> “Máximo seis classes”, “pelo menos três
+        métodos para a classe Reserva”, “duas ações educativas”, “de 10 a 15 artigos” — cada uma
+        dessas frases é um quesito pontuado. Responda com marcadores a) b) c) na mesma ordem
+        do enunciado.</li>
+      <li><strong>Cumpra a cota, e pare.</strong> Na formação geral a pontuação é essencialmente
+        contagem de elementos válidos tirados de um rol pré-definido. Pediu duas causas? Dê
+        exatamente duas, bem nomeadas. Escrever cinco não pontua mais; escrever uma custa metade.</li>
+      <li><strong>Equivalentes são aceitos explicitamente.</strong> Os padrões registram tolerâncias:
+        <span class="chip">1..* no lugar de 0..*</span>
+        <span class="chip">agregação no lugar de associação</span>
+        <span class="chip">pilha sem usar push/pop</span>
+        <span class="chip">mostrarFila com ou sem teste de vazio</span>
+        O corretor busca corretude funcional, não coincidência com o gabarito.</li>
+      <li><strong>Em UML, pontua-se o que dá para contar.</strong> Em 2008 cada quesito valia 1 ponto:
+        atores, herança entre atores, relação ator↔caso de uso, include/extend, direção da seta.
+        Em diagrama de classes: classes, atributos, <strong>multiplicidade</strong>,
+        <strong>generalização</strong>, métodos. Multiplicidade e herança aparecem em todos os anos —
+        nunca entregue um diagrama sem elas.</li>
+      <li><strong>Leia a distribuição de pontos: ela diz onde está o esforço.</strong> Em 2017, o
+        <code>desenfileirar</code> valia 6,0 e o <code>mostrarFila</code>, 4,0. Em 2014, ler causas
+        de violência valia 7,0 e listar fatores preventivos, 3,0. O item que manipula a
+        estrutura sempre vale mais que o item que exibe.</li>
+      <li><strong>Na formação geral o molde é sempre “diagnóstico + intervenção”.</strong> Primeiro
+        analise criticamente o fenômeno relacionando os textos motivadores (e o dispositivo legal,
+        quando houver); depois proponha ações ou políticas públicas. A parte propositiva costuma
+        valer metade da nota — e é a que os candidatos esquecem.</li>
+    </ol>
+
+    <div class="cards c2" style="margin-top:30px">
+      <div class="card">
+        <h3>Checklist de diagrama de classes</h3>
+        <p>Classes do domínio (ignore as de interface) → atributos com tipo → <strong>multiplicidade
+          nas duas pontas</strong> → generalização quando o enunciado sugerir categorias →
+          nomes de papel quando houver duas associações entre as mesmas classes → os métodos
+          que o comando pedir. Depois, releia o enunciado e confira item por item.</p>
+      </div>
+      <div class="card">
+        <h3>Checklist de estrutura de dados</h3>
+        <p>Trate o caso de borda primeiro (vazia, cheia) e imprima a mensagem exata pedida →
+          atualize o ponteiro/topo <em>na ordem certa</em> → devolva o valor removido, não só
+          remova → e, se o enunciado deu um código-base, reutilize os nomes de variável dele.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tecnica">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">06 · Técnica de prova</span>
+      <h2>A habilidade dominante não é memorizar. É julgar itens e ler artefatos.</h2>
+      <p class="lede">Contagem dos comandos usados nas objetivas do componente específico. Julgamento
+        de itens e interpretação de artefato somam a maior parte da prova em todos os anos — e a
+        asserção-razão desapareceu do componente específico em 2021.</p>
+    </div>
+
+    <div class="tripe">
+      <table>
+        <thead><tr><th>Formato do comando</th><th>2008</th><th>2011</th><th>2014</th><th>2017</th><th>2021</th></tr></thead>
+        <tbody id="habTable"></tbody>
+      </table>
+    </div>
+
+    <div class="cards c2" style="margin-top:30px">
+      <div class="card key">
+        <h3>Julgamento de itens I / II / III</h3>
+        <p>Não leia as alternativas antes. Julgue cada item isoladamente como verdadeiro ou falso e
+          anote V/F ao lado. <strong>Um único item falso identificado com certeza costuma eliminar
+          três alternativas.</strong> Se travar em um item, resolva pelos que você tem certeza —
+          raramente é preciso julgar todos.</p>
+      </div>
+      <div class="card key">
+        <h3>Questões com artefato</h3>
+        <p>Leia o artefato — código, diagrama, modelo ER, SQL — <strong>antes</strong> do enunciado.
+          Entenda o que ele faz, depois veja o que perguntam. Em traço de código, escreva a tabela
+          de variáveis linha a linha na folha de rascunho; o erro quase sempre está em pular passos.</p>
+      </div>
+      <div class="card key">
+        <h3>Asserção-razão</h3>
+        <p>Três julgamentos separados, nesta ordem: a asserção I é verdadeira? A asserção II é
+          verdadeira? Só então: II <em>explica</em> I? A armadilha clássica é ter duas afirmações
+          verdadeiras sem relação causal. Caiu 6 vezes em 2011 e zero vezes no específico de 2021 —
+          mas continua viva na formação geral.</p>
+      </div>
+      <div class="card key">
+        <h3>Gestão das 4 horas</h3>
+        <p>Sugestão para o caderno de 2026: 45 min nas 15 objetivas de formação geral → 2 h 15 nas
+          30 objetivas do específico → <strong>40 min na discursiva</strong> (o item de maior retorno
+          por minuto) → 20 min de revisão do cartão-resposta. Não deixe a discursiva para o fim:
+          sozinha ela vale 11,25% e é a primeira a ser sacrificada pelo cansaço. Se sobrar tempo,
+          ela é também o lugar onde ele rende mais.</p>
+      </div>
+    </div>
+
+    <div class="card flag" style="margin-top:14px">
+      <h3>Formação geral: agora são 15 questões, todas objetivas</h3>
+      <p>O conteúdo é atualidades e não se prevê; o formato, sim. A Portaria 154/2026 lista doze
+        objetos oficiais — ética e direitos humanos, estado e trabalho, educação, clima e questões
+        socioambientais, equidade, cultura e comunicação, ciência e tecnologia, globalização, campo
+        e cidade, territórios e diversidade, acessibilidade e inclusão, saúde — e o edital manda
+        conceber os itens pelos princípios dos Direitos Humanos, o que dá o ângulo de quase toda
+        alternativa correta. Como não há mais discursiva aqui, treine uma coisa só:
+        <strong>ler gráfico e tabela sob pressão</strong>. As dez discursivas de formação geral do
+        acervo continuam bons exercícios de escrita, mas deixaram de ser prioridade de prova.</p>
+    </div>
+  </div>
+</section>
+
+<section id="revisao">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">07 · Revisão espaçada</span>
+      <h2>Os fatos que reaparecem entre edições.</h2>
+      <p class="lede">Cada item abaixo caiu em três ou mais anos. Cubra a resposta, tente responder
+        em voz alta, depois abra. Revise na semana 4, na 9 e na 16.</p>
+    </div>
+
+    <div class="cards c2" id="cards"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Fontes: cadernos de prova, gabaritos oficiais e padrões de resposta do Inep para
+      Tecnologia em Análise e Desenvolvimento de Sistemas — edições 2008, 2011, 2014, 2017 e 2021,
+      lidos integralmente. Estrutura da prova de 2026 conforme as portarias Inep nº 154 (formação
+      geral) e nº 169 (componente específico de Análise e Desenvolvimento de Sistemas), ambas de
+      14/04/2026, e o Edital Inep nº 61, de 15/05/2026, que também fixa a data e as 4 horas.</p>
+    <p>Classificação por área e habilidade é interpretativa e serve para priorizar o estudo; os
+      gabaritos são oficiais e as questões anuladas estão marcadas. Os pesos de cada bloco, porém,
+      não são oficiais para 2026: o item 16.5 do edital remete o cálculo da nota a uma nota técnica
+      ainda não publicada, e o que se usa aqui é a proporção das edições anteriores.</p>
+    <p>Feito o diagnóstico, vá para o <a href="simulado-01.html">simulado 1</a> e depois o
+      <a href="simulado-02.html">simulado 2</a>. A planilha com as 200 questões está em
+      <code>../questoes_mapeadas.csv</code>.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------- dados ---------------- */
+  // [ano, num, bloco, tipo, area, tema, habilidade, formato, gabarito]
+  /* Os dados do acervo moram em assets/acervo.js — ver o cabeçalho de lá. Esta página
+     continua lendo exatamente as mesmas quatro estruturas. */
+  var AREA = ACERVO.AREA, HAB = ACERVO.HAB, FMT = ACERVO.FMT, D = ACERVO.linhas;
+
+  var $ = function (s) { return document.querySelector(s); };
+
+  /* ---------------- contagem regressiva ---------------- */
+  (function countdown() {
+    var alvo = new Date(2026, 10, 29); // 29/11/2026
+    var hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    var dias = Math.max(0, Math.round((alvo - hoje) / 86400000));
+    var sem = Math.floor(dias / 7);
+    $("#cdDays").textContent = dias;
+    $("#cdWeeks").textContent = sem;
+    $("#cdHours").textContent = sem * 4;
+  })();
+
+  /* ---------------- gráfico de incidência ---------------- */
+  (function chart() {
+    var ce = D.filter(function (r) { return r[2] === "CE" && r[3] === "obj"; });
+    var tally = {};
+    ce.forEach(function (r) { tally[r[4]] = (tally[r[4]] || 0) + 1; });
+    var rows = Object.keys(tally).map(function (k) { return { k: k, n: tally[k] }; })
+      .sort(function (a, b) { return b.n - a.n; });
+    var max = rows[0].n, total = ce.length;
+    var ramp = ["var(--heat-1)", "var(--heat-2)", "var(--heat-3)", "var(--heat-4)", "var(--heat-5)"];
+
+    $("#chart").innerHTML = rows.map(function (r) {
+      var pct = (r.n / max) * 100;
+      var share = ((r.n / total) * 100).toFixed(1).replace(".", ",");
+      /* O passo da rampa decide a cor do rótulo dentro da barra: os três
+         primeiros passos são claros no tema claro e escuros no escuro, então
+         quem está neles leva tinta, e os dois últimos levam papel. Um token
+         que vira junto com o tema, em vez de um branco fixo. */
+      var idx = Math.min(4, Math.floor((r.n / max) * 5));
+      var step = ramp[idx];
+      var wide = pct > 22;
+      var txt = r.n + " · " + share + "%";
+      return '<div class="crow">' +
+        '<div class="clabel">' + AREA[r.k] + "</div>" +
+        '<div class="ctrack"><div class="cfill' + (wide ? "" : " outside") + (idx <= 2 ? " claro" : "") + '" style="width:' + pct + "%;background:" + step + '">' +
+        "<span>" + txt + "</span></div></div></div>";
+    }).join("");
+  })();
+
+  /* ---------------- tabela de habilidades ---------------- */
+  (function habTable() {
+    var anos = [2008, 2011, 2014, 2017, 2021];
+    var ordem = ["J", "I", "C", "A", "X", "E"];
+    var body = ordem.map(function (h) {
+      var cells = anos.map(function (a) {
+        var n = D.filter(function (r) {
+          return r[0] === a && r[2] === "CE" && r[3] === "obj" && r[6] === h;
+        }).length;
+        return '<td style="font-family:var(--font-data);font-variant-numeric:tabular-nums">' +
+          (n === 0 ? '<span style="color:var(--flag);font-weight:700">0</span>' : n) + "</td>";
+      }).join("");
+      return "<tr><td>" + HAB[h] + "</td>" + cells + "</tr>";
+    }).join("");
+    $("#habTable").innerHTML = body;
+  })();
+
+  /* ---------------- tabela filtrável ---------------- */
+  (function tabela() {
+    var anos = [2008, 2011, 2014, 2017, 2021];
+    function fill(sel, pairs, todos) {
+      sel.innerHTML = '<option value="">' + todos + "</option>" +
+        pairs.map(function (p) { return '<option value="' + p[0] + '">' + p[1] + "</option>"; }).join("");
+    }
+    fill($("#fAno"), anos.map(function (a) { return [a, a]; }), "Todos");
+    fill($("#fBloco"), [["CE", "Componente específico"], ["FG", "Formação geral"], ["disc", "Só discursivas"]], "Todos");
+    fill($("#fArea"), Object.keys(AREA).map(function (k) { return [k, AREA[k]]; }), "Todas");
+    fill($("#fHab"), Object.keys(HAB).map(function (k) { return [k, HAB[k]]; }), "Todas");
+
+    function gabCell(g, tipo) {
+      if (g === "X") return '<span class="gab null">anulada</span>';
+      if (g === "-") return '<span class="gab dash">D</span>';
+      return '<span class="gab">' + g + "</span>";
+    }
+
+    function render() {
+      var ano = $("#fAno").value, bloco = $("#fBloco").value,
+          area = $("#fArea").value, hab = $("#fHab").value,
+          q = $("#fBusca").value.trim().toLowerCase();
+
+      var rows = D.filter(function (r) {
+        if (ano && String(r[0]) !== ano) return false;
+        if (bloco === "disc") { if (r[3] !== "disc") return false; }
+        else if (bloco && r[2] !== bloco) return false;
+        if (area && r[4] !== area) return false;
+        if (hab && r[6] !== hab) return false;
+        if (q && r[5].toLowerCase().indexOf(q) === -1) return false;
+        return true;
+      });
+
+      $("#qCount").textContent = rows.length + " de " + D.length + " questões";
+      $("#qBody").innerHTML = rows.map(function (r) {
+        return "<tr>" +
+          '<td class="cno">' + r[0] + "</td>" +
+          '<td class="cno">' + r[1] + "</td>" +
+          "<td>" + '<span class="chip ' + (r[2] === "CE" ? "ce" : "") + '">' + r[2] + "</span>" +
+            (r[3] === "disc" ? ' <span class="chip disc">disc</span>' : "") + "</td>" +
+          '<td style="font-size:13px;color:var(--muted)">' + AREA[r[4]] + "</td>" +
+          '<td class="ctema">' + r[5] + "</td>" +
+          '<td style="font-size:13px;color:var(--ink-2)">' + HAB[r[6]] + "</td>" +
+          '<td style="font-size:13px;color:var(--muted)">' + FMT[r[7]] + "</td>" +
+          "<td>" + gabCell(r[8], r[3]) + "</td>" +
+          "</tr>";
+      }).join("") || '<tr><td colspan="8" style="padding:24px;text-align:center;color:var(--muted)">Nenhuma questão com esses filtros.</td></tr>';
+    }
+
+    ["#fAno", "#fBloco", "#fArea", "#fHab"].forEach(function (s) { $(s).addEventListener("change", render); });
+    $("#fBusca").addEventListener("input", render);
+    render();
+  })();
+
+  /* ---------------- cronograma ---------------- */
+  var PLANO = [
+    { w: "1", t: "Diagnóstico", why: "2021 é o ano mais preditivo. O resultado aqui reordena tudo o que vem depois.",
+      tasks: ["Resolver a prova de 2021 inteira, cronometrada em 4 h, sem consulta",
+              "Corrigir pelo gabarito e anotar a área de cada erro",
+              "Reordenar as semanas 4 a 14 pelas áreas em que mais errou"] },
+    { w: "2", t: "Tripé: modelagem UML", why: "Cai em 5 de 5 anos. Mecânico, não conceitual.",
+      tasks: ["Refazer as discursivas de UML de 2014 (D3), 2017 (D5) e 2021 (D4)",
+              "Comparar com o padrão oficial e listar o que faltou no seu diagrama",
+              "Fixar a checklist: classes, atributos, multiplicidade, herança, métodos"] },
+    { w: "3", t: "Tripé: estrutura de dados e matriz", why: "As outras duas pernas do tripé, também 5 de 5.",
+      tasks: ["Codificar do zero pilha, fila e lista encadeada (inserir, remover, exibir)",
+              "Refazer 2014 D4 (pilha), 2017 D4 (fila) e 2021 D5 (lista)",
+              "Refazer 2017 D3 e 2021 D3: duplo laço em matriz com vetor acumulador",
+              "Escolher e fixar uma notação: pseudocódigo, C ou Java"] },
+    { w: "4", t: "Eng. de software: requisitos", why: "Funcional x não funcional caiu 8 vezes — o campeão isolado.",
+      tasks: ["Estudar requisitos funcionais, não funcionais e de domínio",
+              "Elicitação, especificação e validação: o que pertence a cada etapa",
+              "Resolver todas as questões de requisitos do mapa de incidência"] },
+    { w: "5", t: "Eng. de software: processos", why: "Modelos de processo caíram em todos os anos.",
+      tasks: ["Cascata, incremental, espiral, RAD, prototipação: quando cada um serve",
+              "RUP: fases x disciplinas, e em que fase cada artefato aparece",
+              "Ágil: Scrum (papéis, artefatos, eventos), XP, TDD, Kanban"] },
+    { w: "6", t: "Eng. de software: testes e qualidade", why: "Testes caíram em todos os anos; qualidade, em quatro.",
+      tasks: ["Caixa-branca x caixa-preta; unitário, integração, sistema, aceitação, regressão",
+              "Complexidade ciclomática e caminhos independentes (sabe calcular?)",
+              "V&V, revisões técnicas formais, CMMI e níveis de maturidade"] },
+    { w: "7", t: "Eng. de software: configuração e manutenção", why: "Gerência de configuração caiu em 4 anos; manutenção, em 4.",
+      tasks: ["Baseline, item de configuração, controle de mudanças, auditoria, release",
+              "Controle de versão na prática: commit, branch, merge, conflito, tag",
+              "Os quatro tipos de manutenção — saber classificar por um cenário"] },
+    { w: "8", t: "UML: os diagramas que caem", why: "Casos de uso caíram em todos os anos; classes, em quatro.",
+      tasks: ["Casos de uso: atores, generalização, include x extend, ponto de extensão",
+              "Classes: multiplicidade, associação, agregação, composição, classe abstrata",
+              "Sequência e atividades: ler e interpretar (2008, 2011, 2021)"] },
+    { w: "9", t: "Projeto OO, padrões e arquitetura", why: "Área em crescimento: padrões e microsserviços entraram recentemente.",
+      tasks: ["POO: encapsulamento, herança, polimorfismo, classe abstrata e interface",
+              "Padrões GoF mais cobrados: Strategy, Factory, Singleton, Adapter, MVC",
+              "Arquitetura: monolítica, camadas, cliente-servidor, microsserviços"] },
+    { w: "10", t: "Algoritmos: traço e depuração", why: "Ler e corrigir código é a habilidade mais cobrada dentro da área.",
+      tasks: ["Traço de mesa disciplinado: tabela de variáveis linha a linha",
+              "Ordenação (bubble, insertion) e busca binária: achar o defeito",
+              "Recursão: condição de parada, ordem das chamadas, valor de retorno"] },
+    { w: "11", t: "Estruturas de dados", why: "Reforça o tripé das discursivas e vale nas objetivas.",
+      tasks: ["Pilha, fila, lista simples e duplamente encadeada: operações e custo",
+              "Árvore binária de busca: percursos pré, in e pós-ordem",
+              "Refazer as discursivas do tripé sem olhar a resposta"] },
+    { w: "12", t: "Banco de dados", why: "Volume baixo, recorrência total: apareceu em todos os anos.",
+      tasks: ["Modelo ER: cardinalidade, entidade fraca, N:M, chave estrangeira, ternário",
+              "Normalização até a 3FN",
+              "SQL: JOIN, GROUP BY, funções de agregação, ORDER BY, subconsulta",
+              "Transações ACID e integridade por triggers"] },
+    { w: "13", t: "Projetos, lógica, SO e redes", why: "Somadas, valem cerca de 20% das objetivas do específico.",
+      tasks: ["Caminho crítico e EAP: saber calcular a duração mínima de um projeto",
+              "Lógica proposicional: tabela-verdade, tautologia, negação de condicional",
+              "SO: processos, memória, multiprogramação, virtualização",
+              "Redes: modelo OSI e TCP/IP, IP e máscara de sub-rede, DNS"] },
+    { w: "14", t: "IHC, segurança e a fronteira de 2026", why: "Onde o INEP vem atualizando a prova a cada ciclo.",
+      tasks: ["Usabilidade, acessibilidade (WCAG, atributo alt) e responsividade",
+              "LGPD: fundamentos, bases legais, papéis de controlador e operador",
+              "Temas prováveis para 2026: DevOps e CI/CD, cloud, APIs REST, contêineres, noções de IA",
+              "Business Model Canvas e MVP"] },
+    { w: "15", t: "Simulado 1: prova de 2014", why: "Resistência e ritmo em condição real.",
+      tasks: ["Resolver a prova de 2014 em 4 h cronometradas, incluindo as discursivas",
+              "Corrigir tudo, inclusive as discursivas contra o padrão oficial",
+              "Registrar os erros por área"] },
+    { w: "16", t: "Simulado 2: prova de 2017", why: "Segunda medição, já com o conteúdo revisado.",
+      tasks: ["Resolver a prova de 2017 em 4 h cronometradas",
+              "Corrigir e comparar com o diagnóstico da semana 1",
+              "Revisar o bloco de flashcards pela terceira vez"] },
+    { w: "17", t: "Consolidação", why: "Só o que ainda erra, mais o tripé.",
+      tasks: ["Refazer apenas as questões que errou nos dois simulados",
+              "Escrever mais uma vez as três discursivas do tripé, com tempo marcado",
+              "Reler a seção de como o INEP corrige, na véspera"] }
+  ];
+
+  (function cronograma() {
+    var host = $("#weeks");
+    host.innerHTML = PLANO.map(function (p, i) {
+      var tasks = p.tasks.map(function (t, j) {
+        var id = "w" + i + "t" + j;
+        return '<label class="task" data-id="' + id + '"><input type="checkbox" id="' + id + '" /><span>' + t + "</span></label>";
+      }).join("");
+      return '<div class="week"><div class="wk">' + p.w + "<small>sem.</small></div>" +
+        '<div class="body"><b>' + p.t + "</b>" +
+        '<span class="why">' + p.why + "</span>" +
+        '<div class="tasks">' + tasks + "</div></div></div>";
+    }).join("");
+
+    var boxes = Array.prototype.slice.call(host.querySelectorAll('input[type="checkbox"]'));
+    var KEY = "enade26.progresso";
+
+    function load() {
+      try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; }
+    }
+    function save(state) {
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* modo privado */ }
+    }
+    function paint() {
+      var done = 0;
+      boxes.forEach(function (b) {
+        b.closest(".task").classList.toggle("done", b.checked);
+        if (b.checked) done++;
+      });
+      $("#pLabel").textContent = done + " de " + boxes.length;
+      $("#pFill").style.width = (boxes.length ? (done / boxes.length) * 100 : 0) + "%";
+    }
+
+    var state = load();
+    boxes.forEach(function (b) {
+      b.checked = !!state[b.id];
+      b.addEventListener("change", function () {
+        var s = load(); s[b.id] = b.checked; save(s); paint();
+      });
+    });
+    paint();
+
+    $("#pReset").addEventListener("click", function () {
+      save({});
+      boxes.forEach(function (b) { b.checked = false; });
+      paint();
+    });
+  })();
+
+  /* ---------------- flashcards ---------------- */
+  var FC = [
+    ["Requisito funcional x não funcional — como distinguir na hora da prova?",
+     "Funcional diz <em>o que</em> o sistema faz (uma ação: cadastrar, emitir, calcular). Não funcional diz <em>como</em> ele faz ou com que qualidade: desempenho, segurança, usabilidade, confiabilidade, portabilidade, disponibilidade. Regra prática: se dá para escrever como “o sistema deve permitir que…”, é funcional; se é um adjetivo de qualidade ou uma restrição, é não funcional. Caiu em 8 questões, mais que qualquer outro assunto."],
+    ["include x extend em casos de uso",
+     "<strong>include</strong>: o comportamento é <em>obrigatório</em> e sempre executado — o caso base depende dele. A seta aponta do caso base <em>para</em> o incluído. <strong>extend</strong>: o comportamento é <em>opcional</em> e ocorre sob condição, em um ponto de extensão declarado. A seta aponta do caso estendido <em>para</em> o caso base — o inverso do include. Caiu em todos os cinco anos."],
+    ["Os quatro tipos de manutenção de software (ISO/IEC 14764)",
+     "<strong>Corretiva</strong>: conserta defeito encontrado. <strong>Adaptativa</strong>: adapta a uma mudança externa — nova legislação, novo sistema operacional, nova versão do banco. <strong>Perfectiva (ou evolutiva)</strong>: melhora desempenho ou adiciona funcionalidade a pedido do usuário. <strong>Preventiva</strong>: melhora a manutenibilidade futura, sem alterar comportamento (refatoração). A pegadinha clássica: mudança de legislação é <em>adaptativa</em>, não corretiva."],
+    ["Propriedades ACID de uma transação",
+     "<strong>Atomicidade</strong>: tudo ou nada. <strong>Consistência</strong>: leva o banco de um estado válido a outro válido. <strong>Isolamento</strong>: transações concorrentes não enxergam estados intermediários umas das outras. <strong>Durabilidade</strong>: uma vez confirmada, resiste a falhas — garantida por log e recuperação."],
+    ["Agregação x composição em diagrama de classes",
+     "<strong>Agregação</strong> (losango vazio): a parte existe independentemente do todo — um departamento agrega funcionários, mas o funcionário sobrevive ao departamento. <strong>Composição</strong> (losango preenchido): a parte não existe sem o todo — destruído o pedido, morrem seus itens. Nos padrões de resposta, o INEP às vezes aceita agregação no lugar de associação simples, desde que você identifique corretamente quem é o todo e quem é a parte."],
+    ["Como calcular o caminho crítico",
+     "Some as durações ao longo de cada caminho da rede de precedências, do início ao fim. O caminho crítico é o <strong>mais longo</strong> — e a duração dele é a duração mínima do projeto. Toda atividade nele tem folga zero: atrasar qualquer uma atrasa o projeto inteiro. Caiu em 2011, 2014 e 2017, sempre a partir de uma tabela de atividades e predecessoras."],
+    ["Baseline em gerência de configuração",
+     "É uma configuração revisada e formalmente aprovada, que passa a servir de base para o trabalho seguinte. Depois de estabelecida, só muda por <strong>controle formal de mudanças</strong> — não por decisão individual do desenvolvedor. As quatro atividades da área: identificação da configuração, controle de versões e de alterações, auditoria, e relatório de situação."],
+    ["Caixa-branca x caixa-preta",
+     "<strong>Caixa-branca (estrutural)</strong>: conhece o código; testa caminhos, condições e laços internos. É onde entra a complexidade ciclomática e o conjunto de caminhos independentes. <strong>Caixa-preta (funcional)</strong>: só entradas e saídas, contra a especificação; particionamento em classes de equivalência e análise de valor-limite. Teste de <strong>regressão</strong> é ortogonal aos dois: reexecuta testes já existentes para garantir que uma mudança não quebrou o que funcionava."],
+    ["Ordem dos percursos em árvore binária",
+     "<strong>Pré-ordem</strong>: raiz, esquerda, direita. <strong>In-ordem</strong>: esquerda, raiz, direita — em uma árvore de busca, produz os elementos em ordem crescente. <strong>Pós-ordem</strong>: esquerda, direita, raiz. Mnemônico: a posição da palavra “ordem” indica onde a raiz é visitada."],
+    ["Entidade fraca no modelo ER",
+     "Não tem chave primária própria suficiente: depende da chave da entidade forte a que se associa, formando uma chave composta. Representada com retângulo duplo, e o relacionamento identificador com losango duplo. Cai junto com contagem de chaves estrangeiras — lembre que um relacionamento N:M vira uma tabela nova com duas FKs."],
+    ["Asserção-razão: a ordem de julgamento",
+     "Três perguntas, nesta ordem: (1) a asserção I é verdadeira? (2) a asserção II é verdadeira? (3) só se ambas forem: II é uma <em>justificativa correta</em> de I? A armadilha mais comum é a alternativa em que as duas proposições são verdadeiras mas não têm relação causal."],
+    ["Estrutura da resposta discursiva que pontua",
+     "Espelhe o comando: se ele tem a) e b), sua resposta tem a) e b). Cumpra a cota numérica exata que ele pede. Nas técnicas, entregue código ou diagrama funcionando — não texto explicativo. Em UML, nunca omita <strong>multiplicidade</strong> e <strong>generalização</strong>: são os dois quesitos que aparecem em todos os padrões de resposta. Limite: 15 linhas."]
+  ];
+
+  $("#cards").innerHTML = FC.map(function (c) {
+    return '<details class="fc"><summary>' + c[0] + '</summary><div class="ans">' + c[1] + "</div></details>";
+  }).join("");
+})();
+</script>
+</body>
+</html>
